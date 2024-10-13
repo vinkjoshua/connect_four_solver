@@ -21,7 +21,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone the repository:
    ```
-   git clone https://your-repository-url.git
+   git clone https://github.com/vinkjoshua/connect_four_solver
    cd connect-four-solver
    ```
 
@@ -38,47 +38,6 @@ Before you begin, ensure you have met the following requirements:
    export DB_PASS='your-db-password'
    export DB_NAME='your-db-name'
    export INSTANCE_CONNECTION_NAME='your-project-id:your-region:your-instance-name'
-   ```
-
-## Database Setup
-
-1. Connect to your Google Cloud SQL instance.
-
-2. Create the necessary table and views:
-
-   ```sql
-   CREATE TABLE game_results (
-       id SERIAL PRIMARY KEY,
-       player_id INTEGER,
-       result VARCHAR(4),
-       moves INTEGER
-   );
-
-   CREATE VIEW player_stats AS
-   SELECT 
-       player_id,
-       COUNT(*) as games_played,
-       SUM(CASE WHEN result = 'win' THEN 1 ELSE 0 END) as won,
-       SUM(CASE WHEN result = 'draw' THEN 1 ELSE 0 END) as draws,
-       SUM(CASE WHEN result = 'loss' THEN 1 ELSE 0 END) as lost,
-       ROUND(SUM(CASE WHEN result = 'win' THEN 1 ELSE 0 END)::NUMERIC / COUNT(*) * 100, 2) as win_percentage
-   FROM 
-       game_results
-   GROUP BY 
-       player_id;
-
-   CREATE VIEW player_rankings AS
-   SELECT 
-       ROW_NUMBER() OVER (ORDER BY win_percentage DESC) as player_rank,
-       player_id,
-       games_played,
-       won,
-       lost,
-       win_percentage as "win%"
-   FROM 
-       player_stats
-   ORDER BY 
-       win_percentage DESC;
    ```
 
 ## Running the Application
@@ -130,10 +89,3 @@ Where:
 
 Contributions to the Connect Four Solver are welcome. Please ensure you follow the coding style and add unit tests for any new features.
 
-## License
-
-[Specify your license here, e.g., MIT, GPL, etc.]
-
-## Contact
-
-If you have any questions or feedback, please contact [Your Name/Email/Contact Information].
